@@ -1,0 +1,13 @@
+family: tag36h11
+tag_size_m: 0.08
+origin_id: 3
+tags:
+- id: 3
+  cx: 5.551115123125783e-17
+  cy: 0.0
+  yaw_deg: -1.8621938081815795e-15
+- id: 4
+  cx: -0.20497743346705452
+  cy: 0.17204877503022598
+  yaw_deg: 176.67754915210458
+notes: "Board frame = origin tag centre; x,y follow origin tag axes; z \u2248 0."

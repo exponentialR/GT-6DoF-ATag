@@ -1,0 +1,14 @@
+object: connection_plate_white_1_sideB
+family: tag36h11
+tag_size_m: 0.08
+origin_id: 2
+tags:
+- id: 2
+  cx: 0.0
+  cy: 0.0
+  yaw_deg: 2.6580379341113805e-14
+- id: 3
+  cx: -0.008588766871721942
+  cy: -0.15619691369417077
+  yaw_deg: -0.26949036688072375
+notes: "Board frame = origin tag centre; x,y follow origin tag axes; z \u2248 0."

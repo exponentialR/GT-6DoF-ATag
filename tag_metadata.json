@@ -1,0 +1,34 @@
+[
+  {
+    "object_id": "connection_plate_1",
+    "tag_family": "tag36h11",
+    "tag_id": 0,
+    "tag_size_m": 0.080,
+    "side": "front",
+    "T_tag_from_obj": { "R": [[1,0,0],[0,1,0],[0,0,1]], "t_m": [0,0,0] }
+  },
+  {
+    "object_id": "connection_plate_1",
+    "tag_family": "tag36h11",
+    "tag_id": 1,
+    "tag_size_m": 0.080,
+    "side": "front",
+    "T_tag_from_obj": { "R": [[1,0,0],[0,1,0],[0,0,1]], "t_m": [0,0,0] }
+  },
+  {
+    "object_id": "connection_plate_1",
+    "tag_family": "tag36h11",
+    "tag_id": 4,
+    "tag_size_m": 0.050,
+    "side": "back",
+    "T_tag_from_obj": { "R": [[1,0,0],[0,1,0],[0,0,1]], "t_m": [0,0,0] }
+  },
+  {
+    "object_id": "connection_plate_1",
+    "tag_family": "tag36h11",
+    "tag_id": 5,
+    "tag_size_m": 0.050,
+    "side": "back",
+    "T_tag_from_obj": { "R": [[1,0,0],[0,1,0],[0,0,1]], "t_m": [0,0,0] }
+  }
+]

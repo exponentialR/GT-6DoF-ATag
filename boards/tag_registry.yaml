@@ -1,0 +1,21 @@
+version: 1
+updated: '2025-08-22T19:37:49Z'
+tags:
+  '0':
+    object: connection_plate_white_1_sideA
+    yaml: boards/connection_plate_white_1_sideA.yaml
+  '1':
+    object: connection_plate_white_1_sideA
+    yaml: boards/connection_plate_white_1_sideA.yaml
+  '2':
+    object: connection_plate_white_1_sideB
+    yaml: boards/connection_plate_white_1_sideB.yaml
+  '3':
+    object: connection_plate_white_1_sideB
+    yaml: boards/connection_plate_white_1_sideB.yaml
+  '4':
+    object: connection_plate_brown_1_sideA
+    yaml: boards/connection_plate_brown_1_sideA.yaml
+  '5':
+    object: connection_plate_brown_1_sideA
+    yaml: boards/connection_plate_brown_1_sideA.yaml
