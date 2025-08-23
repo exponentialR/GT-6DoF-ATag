@@ -186,9 +186,29 @@ def layout_sheet(
                 draw_label_cv(sheet, x_center, y_label, label_ascii)
 
             idx += 1
+    # Build ID label for filename
+    if len(ids) <= 10:
+        id_str = "-".join(str(i) for i in ids)
+    else:
+        id_str = f"{ids[0]}-...-{ids[-1]}"
+
+    paper_name = f"{int(round(paper_w_mm))}x{int(round(paper_h_mm))}mm"
+    base_name = f"{prefix}_IDs{id_str}_{int(tag_size_mm)}mm_{paper_name}_{dpi}dpi"
+
+    png_path = os.path.join(out_dir, f"{base_name}.png")
+    cv2.imwrite(png_path, sheet)
+
+    if HAVE_PIL:
+        im = Image.fromarray(sheet)
+        pdf_path = os.path.join(out_dir, f"{base_name}.pdf")
+        im.save(pdf_path, "PDF", resolution=dpi)
+        print("Saved:", png_path, "and", pdf_path)
+    else:
+        print("Saved:", png_path, "(install Pillow to also produce PDF)")
+
 
     # Filenames
-    paper_name = f"{int(round(paper_w_mm))}x{int(round(paper_h_mm))}mm"
+    # paper_name = f"{int(round(paper_w_mm))}x{int(round(paper_h_mm))}mm"
     png_path = os.path.join(
         out_dir, f"{prefix}_{int(tag_size_mm)}mm_{paper_name}_{dpi}dpi.png"
     )
@@ -227,6 +247,22 @@ def build_id_list(start_id: int, end_id: int):
         sys.exit("--id-end must be >= --id-start.")
     return list(range(start_id, end_id + 1))
 
+def parse_ids_arg(ids_str: str | None, start_id: int | None, end_id: int | None):
+    if ids_str:
+        try:
+            toks = [t.strip() for t in ids_str.split(",") if t.strip() != ""]
+            ids = [int(t) for t in toks]
+        except ValueError:
+            sys.exit("Bad --ids format. Use comma-separated integers, e.g., --ids 40,41,45,78,51")
+        if len(ids) == 0:
+            sys.exit("No IDs parsed from --ids.")
+        return ids
+    if start_id is not None and end_id is not None:
+        return build_id_list(start_id, end_id)
+    sys.exit("Provide either --ids or both --id-start and --id-end.")
+
+
+
 def main():
     ap = argparse.ArgumentParser(
         description="Generate printable AprilTag 36h11 sheets with auto grid and capacity checks."
@@ -240,8 +276,6 @@ def main():
     ap.add_argument("--orientation", type=str, default="portrait", choices=["portrait","landscape"],
                     help="Paper orientation (default: portrait)")
     ap.add_argument("--dpi", type=int, default=DEFAULT_DPI, help=f"Rendering DPI (default: {DEFAULT_DPI})")
-    ap.add_argument("--id-start", type=int, required=True, help="First AprilTag ID (inclusive)")
-    ap.add_argument("--id-end", type=int, required=True, help="Last AprilTag ID (inclusive)")
     ap.add_argument("--out-dir", type=str, default=DEFAULT_OUT_DIR, help=f"Output directory (default: {DEFAULT_OUT_DIR})")
     ap.add_argument("--prefix", type=str, default=DEFAULT_PREFIX, help=f"Filename prefix (default: {DEFAULT_PREFIX})")
     ap.add_argument("--pil-text", action="store_true",
@@ -250,6 +284,11 @@ def main():
                     help=f"Page margin as fraction of min(width,height). Default {DEFAULT_MARGIN_FRAC:.2f}")
     ap.add_argument("--label-gap-frac", type=float, default=DEFAULT_LABEL_GAP_FRAC,
                     help=f"Fraction of cell height between tag and label. Default {DEFAULT_LABEL_GAP_FRAC:.2f}")
+    ap.add_argument("--ids", type=str, default=None,
+                    help="Comma-separated list of specific IDs (e.g., 40,41,45,78,51). "
+                         "If given, overrides --id-start/--id-end.")
+    ap.add_argument("--id-start", type=int, help="First AprilTag ID (inclusive)")
+    ap.add_argument("--id-end", type=int, help="Last AprilTag ID (inclusive)")
 
     args = ap.parse_args()
 
@@ -259,7 +298,7 @@ def main():
               file=sys.stderr)
 
     paper_w_mm, paper_h_mm = parse_paper(args.paper, args.paper_mm, args.orientation)
-    ids = build_id_list(args.id_start, args.id_end)
+    ids = parse_ids_arg(args.ids, args.id_start, args.id_end)
 
     layout_sheet(
         paper_w_mm=paper_w_mm,
