@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import argparse, yaml
 import numpy as np
 import cv2

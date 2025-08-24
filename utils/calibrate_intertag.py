@@ -1,4 +1,3 @@
-# calibrate_intertag.py
 import json, glob, numpy as np, cv2
 from pupil_apriltags import Detector
 from scipy.spatial.transform import Rotation as R
@@ -6,7 +5,7 @@ from scipy.spatial.transform import Rotation as R
 MASTER_ID = 5   # change
 OTHER_ID  = 4   # change
 TAG_SIZE_M = 0.080  # metres (both tags identical size)
-K = json.load(open("intrinsics_color.json"))
+K = json.load(open("../intrinsics_color.json"))
 Kmat = np.array([[K["fx"],0,K["cx"]],[0,K["fy"],K["cy"]],[0,0,1]], float)
 
 DET = Detector(families="tag36h11", nthreads=4, refine_edges=True)
@@ -55,10 +54,10 @@ print("R =\n", R_OM_mean)
 print("t (m) =", t_OM_med.tolist())
 
 # Write back into tag_metadata.json for OTHER_ID as T_tag_from_obj (since object frame = master)
-md = json.load(open("tag_metadata.json"))
+md = json.load(open("../tag_metadata.json"))
 for m in md:
     if int(m["tag_id"]) == OTHER_ID:
         m["T_tag_from_obj"]["R"] = R_OM_mean.tolist()
         m["T_tag_from_obj"]["t_m"] = t_OM_med.tolist()
-json.dump(md, open("tag_metadata.json","w"), indent=2)
+json.dump(md, open("../tag_metadata.json", "w"), indent=2)
 print("Updated tag_metadata.json for tag", OTHER_ID)

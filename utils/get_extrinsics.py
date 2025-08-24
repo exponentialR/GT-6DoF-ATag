@@ -13,5 +13,5 @@ p.stop()
 
 R = [ex.rotation[0:3], ex.rotation[3:6], ex.rotation[6:9]]
 t = list(ex.translation)  # metres
-json.dump({"R_dc": R, "t_dc_m": t}, open("extrinsics_depth_to_color.json","w"), indent=2)
+json.dump({"R_dc": R, "t_dc_m": t}, open("../extrinsics_depth_to_color.json", "w"), indent=2)
 print("R_dc:", R, "\nt_dc (m):", t)

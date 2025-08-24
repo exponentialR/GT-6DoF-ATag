@@ -8,7 +8,7 @@ try:
     intr = sp.get_intrinsics()
     K = {"fx": intr.fx, "fy": intr.fy, "cx": intr.ppx, "cy": intr.ppy,
          "width": intr.width, "height": intr.height}
-    json.dump(K, open("intrinsics_color.json","w"), indent=2)
+    json.dump(K, open("../intrinsics_color.json", "w"), indent=2)
     print(K)
 finally:
     p.stop()
