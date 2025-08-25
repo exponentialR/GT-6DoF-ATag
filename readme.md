@@ -176,10 +176,21 @@ At **data capture** time (later, when you gather training frames):
 ## Block diagram (end-to-end)
 
 ```mermaid
-[Calibrate] -> [Boards + registry] -> [Face shots] -> [Annotate -> T_board_object]
-         \                                   ^
-          \-> [Meshes] -> [Keypoints] -------|
-[Runtime] Detect tag -> T_cam_board -> T_cam_object = T_cam_board · T_board_object
+flowchart LR
+  A["Calibrate cam (ChArUco)\n-> calib_color.yaml"]
+  B["Build boards per face (make_board.py)\n-> boards/*.yaml + boards/tag_registry.yaml"]
+  C["Capture face shots (capture_isc_face.py)\n-> raw/ann PNG + meta JSON"]
+  D["Annotate 4 corners (annotate_face_shot.py)\n-> T_board_object per face"]
+  E["Meshes (.obj)"]
+  F["Generate canonical keypoints (gen_keypoints_from_obj.py)\n-> keypoints.json"]
+  G["Runtime data capture\n-> tag detect + registry lookup"]
+  H["Compute T_cam_board\n-> from tag + board"]
+  I["Compose GT pose\nT_cam_object = T_cam_board * T_board_object\n-> save (RGB, pose)"]
+  J["Train RGB-only pose net"]
+
+  A --> B --> C --> D --> G
+  E --> F --> D
+  G --> H --> I --> J
 
 ```
 
