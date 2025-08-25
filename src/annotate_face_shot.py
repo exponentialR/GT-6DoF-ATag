@@ -13,11 +13,9 @@ Requires: pupil-apriltags, OpenCV, PyYAML, numpy
 """
 
 from __future__ import annotations
-import argparse, json, os, sys, math
-from pathlib import Path
+import argparse
 import numpy as np
 import cv2, yaml
-import re, json, glob
 from pathlib import Path
 import itertools
 from utils.annotation_utils import load_meta, detect_tags, load_board, se3, inv_se3, load_keypoints_fuzzy, choose_face_key, _draw_prompt
