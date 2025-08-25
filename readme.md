@@ -177,16 +177,21 @@ At **data capture** time (later, when you gather training frames):
 
 ```mermaid
 flowchart LR
-  A[Camera calibration<br/>(ChArUco) → calib_color.yaml] --> B
-  B[Per-face board build<br/>(make_board.py)<br/>→ boards/<face>.yaml<br/>→ boards/tag_registry.yaml] --> C
-  C[Capture face shots<br/>(capture_isc_face.py)<br/>→ shots + meta] --> D
+  A[Camera calibration (ChArUco)\n-> calib_color.yaml] --> B
+  B[Per-face board build (make_board.py)\n-> boards/face.yaml + boards/tag_registry.yaml] --> C
+  C[Capture face shots (capture_isc_face.py)\n-> shots + meta] --> D
   E[Meshes (.obj)] --> F
-  F[Canonical 3D keypoints<br/>(gen_keypoints_from_obj.py)<br/>→ keypoints.json] --> D
-  D[Annotate shots (4 clicks/face)<br/>(annotate_face_shot.py)<br/>→ T_board_object per face] --> G
-  G[Runtime data capture<br/>(tag detect + registry lookup)] --> H
-  H[Compute T_cam_board<br/>from tag + board] --> I
-  I[Compose GT pose<br/>T_cam_object = T_cam_board · T_board_object<br/>Save (RGB, pose)] --> J[Train RGB-only pose net]
+  F[Canonical 3D keypoints (gen_keypoints_from_obj.py)\n-> keypoints.json] --> D
+  D[Annotate shots (annotate_face_shot.py)\n-> T_board_object per face] --> G
+  G[Runtime data capture (tag detect + registry lookup)] --> H
+  H[Compute T_cam_board from tag + board] --> I
+  I[Compose GT pose\nT_cam_object = T_cam_board * T_board_object\n-> save (RGB, pose)] --> J[Train RGB-only pose net]
 ```
+[Calibrate] -> [Boards + registry] -> [Face shots] -> [Annotate -> T_board_object]
+         \                                   ^
+          \-> [Meshes] -> [Keypoints] -------|
+[Runtime] Detect tag -> T_cam_board -> T_cam_object = T_cam_board · T_board_object
+
 
 ---
 
