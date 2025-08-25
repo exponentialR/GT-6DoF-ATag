@@ -176,43 +176,12 @@ At **data capture** time (later, when you gather training frames):
 ## Block diagram (end-to-end)
 
 ```mermaid
-flowchart TD
-    subgraph Calibrate
-        C[ChArUco calibrate] -->|calib_color.yaml| CC[Calib file]
-    end
-    subgraph Boards + registry
-        MB[Make board] -->|<object_face>.yaml| BF[Board YAML]
-        MB -->|tag_registry.yaml| TR[Tag registry]
-        CC --> MB
-    end
-    subgraph Face shots
-        CF[Capture face] -->|<object_face>_<face>_<ts>_raw.png| SR[Shot raw PNG]
-        CF -->|<object_face>_<face>_<ts>_ann.png| SA[Shot ann PNG]
-        CF -->|<object_face>_<face>_<ts>_meta.json| SJ[Shot meta JSON]
-        CC --> CF
-        TR --> CF
-    end
-    subgraph Meshes
-        GK[Gen keypoints from OBJ] -->|keypoints.json + object_config.yaml| KP[Keypoints JSON + config]
-        KP --> AN[Annotate face shot]
-        BF --> AN
-    end
-    subgraph Annotate
-        AN -->|<face_key>_T_board_object.yaml| TO[T_board_object YAML]
-        SR --> AN
-        SA --> AN
-        SJ --> AN
-    end
-    subgraph Runtime
-        D[Detect tag] -->|T_cam_board| TC[T_cam_board]
-        TC -->|T_cam_object = T_cam_board · T_board_object| TOY[T_cam_object GT]
-        TO --> TOY
-    end
-```
 [Calibrate] -> [Boards + registry] -> [Face shots] -> [Annotate -> T_board_object]
          \                                   ^
           \-> [Meshes] -> [Keypoints] -------|
 [Runtime] Detect tag -> T_cam_board -> T_cam_object = T_cam_board · T_board_object
+
+```
 
 
 ---
